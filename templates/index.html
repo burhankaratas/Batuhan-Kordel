@@ -5,5 +5,11 @@
 {% endblock %}
 
 {% block body %}
-    <!-- Sayfa içeriği buraya gelecek -->
+
+{% if session["logged_in"] == True %}
+ 
+{% else %}
+
+{% endif %}
+
 {% endblock %}

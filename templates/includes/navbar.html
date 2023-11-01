@@ -1,27 +1,110 @@
-<nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="#" style="font-family: 'Montserrat', sans-serif ;font-weight: 600; font-size: 30px;" id="baslik"> Kordel Müzik </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+<nav class="navbar navbar-expand-lg navbar-light" style="position: fixed; top: 0; width: 100%; z-index: 100;">
+    <a class="navbar-brand" href="/" style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 30px;"
+        id="link1"> Kordel Müzik </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
-  
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-      </ul>
-      <ul class="navbar-nav ml-auto">
-
-      </ul>
+        <ul class="navbar-nav mr-auto" style="margin-left: 20px;">
+            <li class="nav-item">
+                <a href="/hakkinda" class="nav-link"
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link2">
+                    Hakkında </a>
+            </li>
+            <li class="nav-item">
+                <a href="/forum" class="nav-link"
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link3"> Forum
+                    Sayfası </a>
+            </li>
+            <li class="nav-item">
+                <a href="/muzikler" class="nav-link"
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link4">
+                    Müzikleri Dinleyin </a>
+            </li>
+            <li class="nav-item">
+                <a href="/iletisim" class="nav-link"
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link5">
+                    İletişime Geçin </a>
+            </li>
+            <br>
+        </ul>
+        <ul class="navbar-nav">
+            {% if session["logged_in"] == True %}
+            <li class="nav-item" style="margin-right: 5px; margin-left: 5px;">
+                <div style="padding: 5px; border: 1px solid black; text-align: center; border-radius: 15px; margin-bottom: 5px;" id="registerlink">
+                    <a href="/hesabım" class="nav-link"
+                        style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link7"> Hesabım
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item" style="margin-right: 5px; margin-left: 5px;">
+                <div style="padding: 5px; border: 1px solid black; text-align: center; border-radius: 15px; margin-bottom: 5px;" id="registerlink">
+                    <a href="/logout" class="nav-link"
+                        style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link7"> Çıkış Yap
+                    </a>
+                </div>
+            </li>
+            {% else %}
+            <li class="nav-item" style="margin-right: 5px; margin-left: 5px;">
+                <div style="padding: 5px; border: 1px solid black; text-align: center; border-radius: 15px; margin-bottom: 5px;" id="registerlink">
+                    <a href="/login" class="nav-link"
+                        style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link7"> Giriş Yap
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div style="padding: 5px; border: 1px solid black; text-align: center; border-radius: 15px;" id="registerlink">
+                    <a href="/register" class="nav-link"
+                        style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link7"> Kayıt Ol
+                    </a>
+                </div>
+            </li>
+            {% endif %}
+        </ul>
     </div>
-  </nav>
+</nav>
 
-
-
-  <style>
-    #baslik {
+<style>
+    #link1 {
         color: black;
         transition: 0.3s;
     }
 
-    #baslik:hover {
+    #link2, #link3, #link4, #link5, #link6, #link7 {
+        color: black;
+        transition: 0.3s;
+        position: relative;
+    }
+
+    #link2:hover::after,
+    #link3:hover::after,
+    #link4:hover::after,
+    #link5:hover::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 2px; /* Çizgi kalınlığını ayarlayabilirsiniz */
+        background-color: #6fa307; /* Çizgi rengini ayarlayabilirsiniz */
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        transition: 0.3s;
+        transform: scaleX(0); /* Başlangıçta çizgiyi görünmez yapar */
+    }
+
+    #link2:hover::after,
+    #link3:hover::after,
+    #link4:hover::after,
+    #link5:hover::after,
+    #link6:hover::after,
+    #link7:hover::after {
+        transform: scaleX(1);
+    }
+
+    #link1:hover,#link2:hover, #link3:hover, #link4:hover, #link5:hover, #link6:hover, #link7:hover {
         color: #6fa307;
     }
-  </style>
+</style>
