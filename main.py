@@ -111,7 +111,7 @@ def login():
 def logout():
     session.clear()
 
-    flash("Başarıyla çıkış yaptınız. Hesabınıza erişmek için lütfen tekrar giriş yapınız.", "success")
+    flash("Başarıyla çıkış yaptınız. Llütfen tekrar giriş yapınız.", "success")
     return redirect(url_for("login"))
 
 
