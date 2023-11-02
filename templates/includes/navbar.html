@@ -8,6 +8,23 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto" style="margin-left: 20px;">
+            {% if session["logged_in"] == True %}
+            <li class="nav-item">
+                <a href="/forum" class="nav-link"
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link3"> Forum
+                    Sayfası </a>
+            </li>
+            <li class="nav-item">
+                <a href="/favoriler" class="nav-link"
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link4">
+                    Favorilerim </a>
+            </li>
+            <li class="nav-item">
+                <a href="/muzikler" class="nav-link"
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link4">
+                    Müzikleri Dinleyin </a>
+            </li>
+            {% else %}
             <li class="nav-item">
                 <a href="/hakkinda" class="nav-link"
                     style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link2">
@@ -28,6 +45,7 @@
                     style="font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 17px;" id="link5">
                     İletişime Geçin </a>
             </li>
+            {% endif %}
             <br>
         </ul>
         <ul class="navbar-nav">

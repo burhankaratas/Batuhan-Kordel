@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title> Kordel Müzik - Forum Oluştur </title>
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm" style="text-align: center;">
+                <br><br><br><br><br><br><br><br>
+                <form method="post" class="horizontal-form">
+                    <div class="form-group">
+                        <div style="text-align: start;">
+                            <label for="{{ form.title.id }}"> Başlık: </label>
+                        </div>
+                        <span> {{ form.title(class="form-control") }} </span>
+                    </div>
+                    <div class="form-group">
+                        <div style="text-align: start;">
+                            <label for="{{ form.content.id }}"> İçerik: </label>
+                        </div>
+                        {{ form.content(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <a href="/forum" class="btn btn-danger"> İptal Et </a>
+                        <input type="submit" value="Yayımlayın" class="btn btn-success">                      
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

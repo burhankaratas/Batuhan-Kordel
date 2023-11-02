@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title> Kordel Müzik - Forum </title>
+{% endblock %}
+
+{% block body %}
+
+    <br><br><br>
+
+    {% if session["logged_in"] == True %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm" style="text-align: center;">
+                <span style="font-size: 24px; color: black;"> Birşey mi arıyorsun? <span style="color: yellowgreen;"> Batuhan Kordele </span> <br> ait forumlar burada! </span>
+                <br><br>
+                <a href="/yeniforum" class="btn btn-success"> Yeni Forum Başlatın </a> <a href="/forumlarim" class="btn btn-warning"> Forumlarımı Görüntüle </a>
+                <br><br>
+                <div>
+                    Forumlar burada olacak
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm" style="text-align: center;">
+                <span style="font-size: 24px; color: black;"> Birşey mi arıyorsun? <span style="color: yellowgreen;"> Batuhan Kordele </span> <br> ait forumlar burada! </span>
+                <br><br>
+                <div>
+                    Forumlar burada olacak
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

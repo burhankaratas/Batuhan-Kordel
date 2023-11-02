@@ -18,7 +18,6 @@ app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 mysql = MySQL(app)
 
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -33,7 +32,15 @@ def login_required(f):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if session["logged_in"] == True:
+        return render_template("app.html")
+    
+    elif session["logged_in"] == False:
+        return render_template("index.html")
+
+@app.route("/hakkinda")
+def hakkinda():
+    return render_template("hakkinda.html")
 
 @app.route("/register", methods = ["GET", "POST"])
 def register():
@@ -94,6 +101,9 @@ def login():
                 session["logged_in"] = True
                 session["username"] = usernameData
 
+                mysql.connection.commit()
+                cursor.close()
+
                 flash("Hesabınıza başarıyla giriş yaptınız.", "success")
                 return redirect(url_for("index"))
             
@@ -109,10 +119,69 @@ def login():
 @app.route("/logout")
 @login_required  
 def logout():
-    session.clear()
+    session["logged_in"] = False
+    session["username"] = "Misafir"
 
-    flash("Başarıyla çıkış yaptınız. Llütfen tekrar giriş yapınız.", "success")
+    flash("Başarıyla çıkış yaptınız. Hesabınıza erişmek için lütfen tekrar giriş yapınız.", "success")
     return redirect(url_for("login"))
+
+
+@app.route("/forum", methods = ["GET", "POST"])
+def forum():
+    if session["logged_in"] == False:
+        return render_template("forum.html")
+    
+    elif session["logged_in"] == True:
+        return render_template("forum.html", username = session["username"])
+
+
+@app.route("/forum/<string:id>", methods = ["GET", "POST"])
+def forums(id):
+    pass 
+
+@app.route("/yeniforum", methods = ["GET", "POST"])
+@login_required
+def newForum():
+    form = ForumForm(request.form)
+
+    if request.method == "GET":
+        return render_template("newforum.html", username = session["username"], form = form)
+    
+    elif request.method == "POST":
+        title = form.title.data
+        content = form.content.data
+
+        cursor = mysql.connection.cursor()
+
+        sorgu = "SELECT * FROM users WHERE username = %s"
+        result = cursor.execute(sorgu, (session["username"],))
+
+        if result > 0:
+            data = cursor.fetchone()
+
+            userid = data["id"]
+
+            sorgu2 = "INSERT INTO topics (userid, title, content) VALUES (%s, %s, %s)"
+            cursor.execute(sorgu2, (userid, title, content))
+
+            mysql.connection.commit()
+            cursor.close()
+
+            flash("Forumunuz başarıyla yayımlandı. Forumlarımı görüntüle kısmından forumunuza erişebilirsiniz.", "success")
+            return redirect(url_for("forum"))
+        
+        else:
+            flash("Beklenmedik bir hata ile karşılaşıldı. Lütfen giriş yapıp tekrar deneyiniz.", "danger")
+            return redirect(url_for("logout"))
+    
+
+
+
+
+        
+
+
+
 
 
 class RegisterForm(Form):
@@ -122,10 +191,14 @@ class RegisterForm(Form):
     password = PasswordField(validators=[validators.length(min=8, max=40), validators.InputRequired()])
     passwordAgain = PasswordField(validators=[validators.length(min=8, max=40),  validators.InputRequired()])
 
-
 class LoginForm(Form):
     username = StringField()
     password = PasswordField()
+
+class ForumForm(Form):
+    title = StringField(validators=[validators.InputRequired(), validators.length(min=3, max=50)])
+    content = TextAreaField(validators=[validators.InputRequired(), validators.length(min=10, max=1000)])
+
 
 if __name__ == "__main__":
     app.run(debug= True)
