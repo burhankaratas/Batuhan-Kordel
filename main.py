@@ -126,18 +126,72 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/forum", methods = ["GET", "POST"])
+@app.route("/forum")
 def forum():
-    if session["logged_in"] == False:
-        return render_template("forum.html")
-    
-    elif session["logged_in"] == True:
-        return render_template("forum.html", username = session["username"])
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM topics")  
+    topics = cursor.fetchall()  
+
+    return render_template("forum.html", topics=topics)
 
 
-@app.route("/forum/<string:id>", methods = ["GET", "POST"])
+
+@app.route("/forum/<string:id>", methods=["GET", "POST"])
 def forums(id):
-    pass 
+    form = CommentForm(request.form)
+
+    cursor = mysql.connection.cursor()
+    sorgu = "SELECT * FROM topics WHERE id = %s"
+    result = cursor.execute(sorgu, (id,))
+
+    if result > 0:
+        data = cursor.fetchone()
+
+        sorgu2 = "SELECT * FROM users WHERE id = %s"
+        result2 = cursor.execute(sorgu2, (data["userid"],))
+
+        if result2 > 0:
+            data2 = cursor.fetchone()
+
+            mysql.connection.commit()
+            cursor.close()
+
+            if request.method == "POST":
+                
+
+                cursor = mysql.connection.cursor()
+
+                sorgu25 = "SELECT * FROM users WHERE username = %s"
+                result25 = cursor.execute(sorgu25, (session["username"],))
+
+                if result > 0:
+                    data25 = cursor.fetchone()
+
+                    userid = data25["id"]
+                    topicid = data["id"]
+                    content = form.content.data
+
+                sorgu3 = "INSERT INTO comments (userid, topicid, content) VALUES (%s, %s, %s)"
+                result3 = cursor.execute(sorgu3, (userid, topicid, content))
+
+                mysql.connection.commit()
+                cursor.close()
+
+                flash("Yorumunuz Gönderildi!", "success")
+                return redirect(url_for("forum"))
+
+
+
+            return render_template("forumcontent.html", data=data, data2=data2, form = form)
+        
+        else:
+            flash("Sayfa yüklenirken bir hata oluştu. Lütfen tekrar deneyiniz. Hata devam ederse lütfen geliştiricilere bildiriniz.", "danger")
+            return redirect(url_for("forum"))
+
+    else:
+        flash("Böyle bir makale bulunamadı.", "danger")
+        return redirect(url_for("forum"))
+
 
 @app.route("/yeniforum", methods = ["GET", "POST"])
 @login_required
@@ -178,12 +232,6 @@ def newForum():
 
 
 
-        
-
-
-
-
-
 class RegisterForm(Form):
     username = StringField(validators=[validators.length(min=5, max=25),validators.InputRequired()])
     email = StringField(validators=[validators.Email(), validators.InputRequired()])
@@ -198,6 +246,9 @@ class LoginForm(Form):
 class ForumForm(Form):
     title = StringField(validators=[validators.InputRequired(), validators.length(min=3, max=50)])
     content = TextAreaField(validators=[validators.InputRequired(), validators.length(min=10, max=1000)])
+
+class CommentForm(Form):
+    content = TextAreaField(validators=[validators.InputRequired(), validators.length(min=5,max=1000)])
 
 
 if __name__ == "__main__":

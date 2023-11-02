@@ -17,7 +17,15 @@
                 <a href="/yeniforum" class="btn btn-success"> Yeni Forum Başlatın </a> <a href="/forumlarim" class="btn btn-warning"> Forumlarımı Görüntüle </a>
                 <br><br>
                 <div>
-                    Forumlar burada olacak
+                    <br><br><br><br>
+                        <span style="font-size: 24px; color: yellowgreen;"> Tüm Forumlar </span>
+
+                        <br><br>
+                    <div class="list-group">
+                        {% for topic in topics %}
+                            <a href="/forum/{{topic.id}}" class="list-group-item list-group-item-action"> {{topic.title}} </a>
+                        {% endfor %}
+                    </div>  
                 </div>
             </div>
         </div>
@@ -29,7 +37,15 @@
                 <span style="font-size: 24px; color: black;"> Birşey mi arıyorsun? <span style="color: yellowgreen;"> Batuhan Kordele </span> <br> ait forumlar burada! </span>
                 <br><br>
                 <div>
-                    Forumlar burada olacak
+                    <br><br><br><br>
+                        <span style="font-size: 24px; color: yellowgreen;"> Tüm Forumlar </span>
+
+                        <br><br>
+                    <div class="list-group">
+                        {% for topic in topics %}
+                            <a href="/forum/{{topic.id}}" class="list-group-item list-group-item-action"> {{topic.title}} </a>
+                        {% endfor %}
+                    </div>  
                 </div>
             </div>
         </div>

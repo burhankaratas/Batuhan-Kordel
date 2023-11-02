@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+
+{% block head %}
+    <title> Kordel Müzik - Forum - {{data["title"]}} </title>
+{% endblock %}
+
+{% block body %}
+<br><br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <span style="font-size: 24px;"> {{data["title"]}} - </span>
+                <span style="font-size: 17px;"> {{data2["username"]}} </span>
+                <hr>
+                <span style="font-size: 15px;"> {{data["content"]}} </span>
+                <br><br><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm" style="text-align: end;">
+                <form method="post" class="horizontal-form">
+                    <div class="form-group">
+                        <div style="text-align: start;">
+                            <label for="{{ form.content.id }}"> </label>
+                        </div>
+                        <span> {{ form.content(class="form-control") }} </span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Yorum Yap" class="btn btn-success">                      
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <span style="font-size: 24px; color: yellowgreen;"> Yorumlar </span> <br><br>
+                <div>
+                    yorumlar burda olcak
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
