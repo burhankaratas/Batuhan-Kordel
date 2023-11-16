@@ -36,7 +36,24 @@
             <div class="col-sm">
                 <span style="font-size: 24px; color: yellowgreen;"> Yorumlar </span> <br><br>
                 <div>
-                    yorumlar burda olcak
+                    <ul>
+                        {% for comment in comments %}
+                        <li style="border: 1px solid yellowgreen; padding: 10px; margin-top: 5px; list-style-type: none;">
+                        
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        {{comment["content"]}}
+                                    </div>
+                                    <div class="col-sm" style="text-align: end;">
+                                        {{comment["date"]}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>

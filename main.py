@@ -32,11 +32,11 @@ def login_required(f):
 
 @app.route("/")
 def index():
-    if session["logged_in"] == True:
+    if "logged_in" in session:
         return render_template("app.html")
     
-    elif session["logged_in"] == False:
-        return render_template("index.html")
+
+    return render_template("index.html")
 
 @app.route("/hakkinda")
 def hakkinda():
@@ -119,9 +119,8 @@ def login():
 @app.route("/logout")
 @login_required  
 def logout():
-    session["logged_in"] = False
-    session["username"] = "Misafir"
-
+    session.clear()
+    
     flash("Başarıyla çıkış yaptınız. Hesabınıza erişmek için lütfen tekrar giriş yapınız.", "success")
     return redirect(url_for("login"))
 
@@ -153,6 +152,10 @@ def forums(id):
         if result2 > 0:
             data2 = cursor.fetchone()
 
+            sorgu3 = "SELECT * FROM comments WHERE topicid = %s" 
+            result3 = cursor.execute(sorgu3, (id,))
+            comments = cursor.fetchall()
+
             mysql.connection.commit()
             cursor.close()
 
@@ -164,12 +167,17 @@ def forums(id):
                 sorgu25 = "SELECT * FROM users WHERE username = %s"
                 result25 = cursor.execute(sorgu25, (session["username"],))
 
-                if result > 0:
+                if result25 > 0:
                     data25 = cursor.fetchone()
 
                     userid = data25["id"]
                     topicid = data["id"]
                     content = form.content.data
+                
+                else:
+                    flash("Yorum yapmak için önce giriş yapmalısınız.", "danger")
+                    return redirect(url_for("login"))
+
 
                 sorgu3 = "INSERT INTO comments (userid, topicid, content) VALUES (%s, %s, %s)"
                 result3 = cursor.execute(sorgu3, (userid, topicid, content))
@@ -182,7 +190,7 @@ def forums(id):
 
 
 
-            return render_template("forumcontent.html", data=data, data2=data2, form = form)
+            return render_template("forumcontent.html", data=data, data2=data2, form = form, comments = comments)
         
         else:
             flash("Sayfa yüklenirken bir hata oluştu. Lütfen tekrar deneyiniz. Hata devam ederse lütfen geliştiricilere bildiriniz.", "danger")
